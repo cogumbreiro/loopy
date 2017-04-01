@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+import argparse
+import os
+
+def run(cmd):
+    print(cmd)
+    os.system(cmd)
+
+def main():
+    parser = argparse.ArgumentParser(description='Compile C code according to some transformation specification.')
+    parser.add_argument("-d", required=True, dest="llvm", help="LLVM root directory")
+    parser.add_argument('-I', dest='includes', help='directory to include (optional)')
+    parser.add_argument('-t', required=True, dest='transformation', help='transformations filename')
+    parser.add_argument("input", help="C filename.")
+    args = parser.parse_args()
+    filename, _ = os.path.splitext(args.input)
+    includes = "-I " + args.includes if args.includes is not None else ""
+    run(args.llvm + "/bin/clang " + includes + " -S -emit-llvm " + args.input)
+    output1 = os.path.basename(filename) + ".ll"
+    output2 = os.path.basename(filename) + ".s"
+    opt = args.llvm + "/bin/opt -load " + args.llvm + "/lib/LLVMPolly.so"
+    run(opt + " -S -polly-canonicalize " + output1 + " | " + 
+        opt + " -polly-pwaff -polly-codegen -polly-trans=" + args.transformation + " -S | " +
+        opt + " -O3 | " + 
+        llvm_build + "/bin/llc -relocation-model=pic - -o " + output2)
+
+if __name__ == "__main__":
+    main()
+
