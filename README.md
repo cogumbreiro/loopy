@@ -48,6 +48,11 @@ The above example can be found in **/example** directory of the repository. Inst
 3. Execute:  
     `make -f loopy_install.mk`
 
+### Using the `loopy` script
+
+Example:
+	./loopy -d llvm/build/ -t tests/polybench-c-4.1/stencils/fdtd-2d/opt.t -I tests/polybench-c-4.1/utilities/ tests/polybench-c-4.1/stencils/fdtd-2d/fdtd-2d.c
+
 ### Executing matrix multiplication example 
 To run Loopy on the matrix multiplication example, execute
 

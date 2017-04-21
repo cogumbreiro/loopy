@@ -22,7 +22,7 @@ def main():
     run(opt + " -S -polly-canonicalize " + output1 + " | " + 
         opt + " -polly-pwaff -polly-codegen -polly-trans=" + args.transformation + " -S | " +
         opt + " -O3 | " + 
-        llvm_build + "/bin/llc -relocation-model=pic - -o " + output2)
+        args.llvm + "/bin/llc -relocation-model=pic - -o " + output2)
 
 if __name__ == "__main__":
     main()
